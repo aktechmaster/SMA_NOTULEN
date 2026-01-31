@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Notulen Rapat SMP IT Al-Kautsar</title>
+    <link rel="icon" type="image/png" href="logosmpit.png">
+    <link rel="shortcut icon" type="image/png" href="logosmpit.png">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+    /* --- CSS SAMA PERSIS DENGAN SEBELUMNYA --- */
+    :root {
+        --primary: #0284c7;       
+        --accent: #06b6d4;         
+        --bg-page: #f0f9ff;       
+        --glass-bg: rgba(255, 255, 255, 0.95); 
+        --text-main: #334155;     
+        --input-bg: #ffffff;      
+        --shadow: 0 10px 40px -10px rgba(2, 132, 199, 0.2); 
+        --success: #22c55e;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+        font-family: 'Outfit', sans-serif;
+        background-color: var(--bg-page);
+        background-image: 
+            radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+            radial-gradient(circle at 90% 80%, rgba(2, 132, 199, 0.15) 0%, transparent 40%);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 20px 15px;
+        margin: 0;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 600px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid white;
+        border-radius: 24px;
+        padding: 30px 20px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .container::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    .header { text-align: center; margin-bottom: 25px; }
+    .header h2 {
+        font-size: 1.6rem; margin: 0;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+    }
+    .header p { color: #64748b; font-size: 0.85rem; margin-top: 5px; font-weight: 500; letter-spacing: 1px; }
+
+    .input-group { margin-bottom: 15px; }
+    .input-group label {
+        display: block; margin-bottom: 6px; font-size: 0.8rem;
+        font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .form-control {
+        width: 100%; padding: 12px 14px;
+        background: var(--input-bg); border: 2px solid #e2e8f0;
+        border-radius: 12px; color: var(--text-main);
+        font-size: 0.95rem; font-family: 'Outfit', sans-serif;
+        transition: all 0.25s ease;
+    }
+    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1); }
+    
+    /* Tambahan untuk Textarea */
+    textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    /* --- LIST KARYAWAN STYLING --- */
+    .student-list-container {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .student-item {
+        display: flex;
+        justify-content: space-between; 
+        align-items: center;
+        background: white;
+        padding: 12px 15px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        transition: transform 0.2s;
+    }
+    
+    .student-name {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #334155;
+        flex: 1;
+        padding-right: 15px;
+        line-height: 1.4;
+    }
+
+    .attendance-options {
+        display: flex;
+        gap: 6px; 
+        flex-shrink: 0; 
+    }
+
+    .radio-option { 
+        position: relative; 
+        width: auto; 
+        height: auto; 
+    } 
+    
+    .radio-option input { 
+        position: absolute; width: 100%; height: 100%; 
+        opacity: 0; cursor: pointer; z-index: 2; 
+    }
+
+    .radio-label {
+        width: 40px !important; 
+        height: 40px !important;
+        display: grid !important;
+        place-content: center !important;
+        place-items: center !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        line-height: 1 !important;
+        text-align: center !important;
+        background: #fff; 
+        border: 2px solid #e2e8f0; 
+        border-radius: 8px; 
+        font-weight: 800;        
+        font-size: 0.9rem;       
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #94a3b8; 
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    .radio-label:hover { border-color: #cbd5e1; color: #64748b; }
+
+    /* Hadir - Hijau */
+    .radio-option input[value="Hadir"]:checked + .radio-label { 
+        background: var(--success); 
+        border-color: var(--success);
+        color: white; 
+        box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); 
+        transform: translateY(-2px);
+    }
+    
+    /* Alpha - Merah */
+    .radio-option input[value="Alfa"]:checked + .radio-label { 
+        background: var(--danger); 
+        border-color: var(--danger);
+        color: white; 
+        box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); 
+        transform: translateY(-2px);
+    }
+
+    .btn-submit {
+        width: 100%; padding: 16px; margin-top: 20px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: white; border: none; border-radius: 12px;
+        font-size: 1rem; font-weight: 800; letter-spacing: 1px;
+        cursor: pointer; box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.4);
+        text-transform: uppercase;
+    }
+
+    @media (max-width: 480px) {
+        .container { padding: 25px 15px; }
+        .student-item {
+            flex-direction: column; 
+            align-items: flex-start; 
+            padding: 15px;
+            gap: 12px; 
+        }
+        .student-name {
+            font-size: 1rem; 
+            padding-right: 0;
+            width: 100%;
+            border-bottom: 1px dashed #e2e8f0; 
+            padding-bottom: 10px;
+            margin-bottom: 0;
+        }
+        .attendance-options {
+            width: 100%;
+            justify-content: space-between; 
+            gap: 8px; 
+        }
+        .radio-label { 
+            width: 100%; 
+            height: 44px; 
+            font-size: 1rem;
+            padding: 0;
+            line-height: 1;
+        }
+        .radio-option { flex: 1; }
+    }
+    
+    .loader { width: 24px; height: 24px; border: 3px solid #FFF; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
+    .loader-dark { border-color: var(--primary); border-bottom-color: transparent; }
+    @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.9); z-index: 10; display: flex; justify-content: center; align-items: center; flex-direction: column; color: var(--primary); font-weight: 700; }
+
+    .school-logo {
+        width: 100px;
+        height: auto;
+        display: block;
+        margin: 0 auto 10px auto;
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div id="mainLoader" class="loading-overlay" style="display: none;">
+        <span class="loader loader-dark" style="width: 40px; height: 40px;"></span>
+        <p style="margin-top: 10px;">Mengirim Notulen...</p>
+    </div>
+
+    <div class="header">
+        <img src="logosmpit.png" alt="Logo Sekolah" class="school-logo">
+        
+        <h2>FORM NOTULEN RAPAT</h2>
+        <p>Smart Input System v2.0</p>
+    </div>
+
+    <form id="meetingForm">
+        
+        <div class="input-group">
+            <label>Tanggal Rapat</label>
+            <input type="date" id="tanggal" name="tanggal" class="form-control" required>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <div class="input-group" style="flex: 1;">
+                <label>Waktu Mulai</label>
+                <input type="time" id="waktuMulai" name="waktuMulai" class="form-control" required>
+            </div>
+            <div class="input-group" style="flex: 1;">
+                <label>Waktu Selesai</label>
+                <input type="time" id="waktuSelesai" name="waktuSelesai" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Jenis Rapat</label>
+            <select id="jenisRapat" name="jenisRapat" class="form-control" required onchange="filterKaryawan()">
+                <option value="" disabled selected>-- Pilih Jenis --</option>
+                <option value="Umum">Rapat Umum</option>
+                <option value="Vice Principal">Rapat Vice Principal</option>
+            </select>
+            <small id="loadingKaryawan" style="color: var(--primary); display: none;">Mengambil data karyawan...</small>
+        </div>
+
+        <div class="input-group">
+            <label>Nama Rapat</label>
+            <input type="text" id="namaRapat" name="namaRapat" class="form-control" placeholder="Contoh: Rapat Koordinasi Bulanan" required>
+        </div>
+
+        <div class="input-group">
+            <label>Tempat Rapat</label>
+            <input type="text" id="tempatRapat" name="tempatRapat" class="form-control" placeholder="Contoh: Ruang Guru" required>
+        </div>
+
+        <div class="input-group">
+            <label>Pemimpin Rapat</label>
+            <input type="text" id="pemimpinRapat" name="pemimpinRapat" class="form-control" required>
+        </div>
+
+        <div class="input-group">
+            <label>Notulis</label>
+            <input type="text" id="notulis" name="notulis" class="form-control" required>
+        </div>
+
+        <div class="input-group">
+            <label>Topik Bahasan</label>
+            <input type="text" id="topik" name="topik" class="form-control" required>
+        </div>
+
+        <div class="input-group">
+            <label>Hasil Rapat</label>
+            <textarea id="hasilRapat" name="hasilRapat" class="form-control" placeholder="Tuliskan poin-poin hasil rapat..." required></textarea>
+        </div>
+
+        <div class="input-group">
+            <label>Upload Dokumentasi (Opsional)</label>
+            <input type="file" id="dokumentasi" class="form-control" accept="image/*,application/pdf">
+        </div>
+
+        <div class="input-group">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
+                <label style="margin:0;">Daftar Kehadiran</label>
+            </div>
+            
+            <div id="employeeListContainer" class="student-list-container">
+                <div style="text-align: center; color: #94a3b8; padding: 20px;">
+                    Silakan pilih Jenis Rapat terlebih dahulu untuk memuat daftar peserta.
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnKirim">
+            KIRIM NOTULEN <i class="fa-solid fa-paper-plane"></i>
+        </button>
+
+    </form>
+    
+    <div style="text-align: center; margin-top: 20px; font-size: 0.75rem; color: #cbd5e1; line-height: 1.5;">
+        &copy; 2026 <span style="font-weight: 700; color: var(--accent);">aktechmaster</span><br>
+        Designed & Developed by aktechmaster
+    </div>
+
+</div>
+
+<script>
+    // --- GANTI URL INI SETELAH DEPLOY GOOGLE APPS SCRIPT ---
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzin2SzZB2TrN2TXncSsyq6rRaoET2DP5B9kOwbve_HrSlw9C4xOP-CpmIbfxmUAUrgqA/exec'; 
+
+    let allEmployees = [];
+
+    // Saat halaman dimuat, ambil data karyawan
+    window.onload = function() {
+        document.getElementById('loadingKaryawan').style.display = 'block';
+        fetch(SCRIPT_URL + '?action=getEmployees')
+            .then(response => response.json())
+            .then(data => {
+                allEmployees = data;
+                document.getElementById('loadingKaryawan').style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('employeeListContainer').innerHTML = '<p style="text-align:center; color:red;">Gagal memuat data karyawan.</p>';
+            });
+    };
+
+    function filterKaryawan() {
+        const jenis = document.getElementById('jenisRapat').value;
+        const container = document.getElementById('employeeListContainer');
+        container.innerHTML = '';
+
+        if (!jenis) return;
+
+        let filteredList = [];
+
+        if (jenis === 'Vice Principal') {
+            // Filter yang jabatannya mengandung kata "Vice" (case insensitive)
+            filteredList = allEmployees.filter(emp => emp.jabatan && emp.jabatan.toLowerCase().includes('vice'));
+        } else {
+            // Umum = Semua karyawan
+            filteredList = allEmployees;
+        }
+
+        if (filteredList.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 20px;">Tidak ada data karyawan ditemukan.</div>';
+            return;
+        }
+
+        filteredList.forEach((emp, index) => {
+            const div = document.createElement('div');
+            div.className = 'student-item';
+            
+            // Default Hadir
+            div.innerHTML = `
+                <div class="student-name">${emp.nama}</div>
+                <div class="attendance-options">
+                    <div class="radio-option">
+                        <input type="radio" name="attendance_${index}" value="Hadir" checked>
+                        <div class="radio-label">H</div>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="attendance_${index}" value="Alfa">
+                        <div class="radio-label">A</div>
+                    </div>
+                    <input type="hidden" name="employee_name_${index}" value="${emp.nama}">
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    document.getElementById('meetingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const loader = document.getElementById('mainLoader');
+        const btn = document.getElementById('btnKirim');
+        
+        // Validasi
+        const container = document.getElementById('employeeListContainer');
+        if(container.children.length === 0 || container.innerText.includes('pilih Jenis Rapat')) {
+            alert("Harap pilih jenis rapat dan pastikan daftar karyawan sudah muncul.");
+            return;
+        }
+
+        loader.style.display = 'flex';
+        btn.disabled = true;
+
+        const formData = new FormData(this);
+        const dataObj = {};
+        const attendanceData = {};
+
+        // Ambil data form biasa
+        formData.forEach((value, key) => {
+            if (key.startsWith('attendance_')) {
+                const index = key.split('_')[1];
+                const name = formData.get(`employee_name_${index}`);
+                attendanceData[name] = value;
+            } else if (!key.startsWith('employee_name_') && key !== 'dokumentasi') {
+                dataObj[key] = value;
+            }
+        });
+
+        dataObj.kehadiran = attendanceData;
+
+        // Handle File Upload
+        const fileInput = document.getElementById('dokumentasi');
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function() {
+                dataObj.fileData = reader.result.split(',')[1]; // Base64
+                dataObj.fileName = file.name;
+                dataObj.mimeType = file.type;
+                kirimDataKeGAS(dataObj);
+            };
+        } else {
+            kirimDataKeGAS(dataObj);
+        }
+    });
+
+    function kirimDataKeGAS(data) {
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            document.getElementById('mainLoader').style.display = 'none';
+            document.getElementById('btnKirim').disabled = false;
+            
+            if(result.status === 'success') {
+                alert('Notulen berhasil disimpan!');
+                document.getElementById('meetingForm').reset();
+                document.getElementById('employeeListContainer').innerHTML = 
+                    '<div style="text-align: center; color: #94a3b8; padding: 20px;">Silakan pilih Jenis Rapat terlebih dahulu.</div>';
+            } else {
+                alert('Gagal menyimpan: ' + result.message);
+            }
+        })
+        .catch(error => {
+            document.getElementById('mainLoader').style.display = 'none';
+            document.getElementById('btnKirim').disabled = false;
+            alert('Terjadi kesalahan jaringan.');
+            console.error(error);
+        });
+    }
+</script>
+
+</body>
+</html>
